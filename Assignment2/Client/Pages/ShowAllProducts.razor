@@ -1,0 +1,47 @@
+﻿@page "/ShowAllProducts"
+@using Assignment2.Shared
+@using Assignment2.Shared.Models
+@inject HttpClient Http
+
+<PageTitle>Show All Products</PageTitle>
+
+<h1>All Products Page</h1>
+
+<p>Click the button to load all products.</p>
+<button @onclick=FetchAllProducts>Show All Products</button>
+
+@if (products == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Price</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var product in products)
+            {
+                <tr>
+                    <td>@product.title</td>
+                    <td>@product.price</td>
+                    <td>@product.description</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private Product[]? products;
+
+    private async void FetchAllProducts()
+    {
+        products = await Http.GetFromJsonAsync<Product[]>("/FetchAll");
+    }
+}
